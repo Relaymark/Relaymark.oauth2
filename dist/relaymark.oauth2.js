@@ -54,34 +54,33 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	__webpack_require__(2);
-
-	var _svOAuth = __webpack_require__(3);
+	var _svOAuth = __webpack_require__(2);
 
 	var _svOAuth2 = _interopRequireDefault(_svOAuth);
 
-	var _svOAuthStorage = __webpack_require__(4);
+	var _svOAuthStorage = __webpack_require__(3);
 
 	var _svOAuthStorage2 = _interopRequireDefault(_svOAuthStorage);
 
-	var _svQueryStringHelper = __webpack_require__(5);
+	var _svQueryStringHelper = __webpack_require__(4);
 
 	var _svQueryStringHelper2 = _interopRequireDefault(_svQueryStringHelper);
 
-	var _svHttpBuffer = __webpack_require__(6);
+	var _svHttpBuffer = __webpack_require__(5);
 
 	var _svHttpBuffer2 = _interopRequireDefault(_svHttpBuffer);
 
-	var _svOAuthInterceptor = __webpack_require__(7);
+	var _svOAuthInterceptor = __webpack_require__(6);
 
 	var _svOAuthInterceptor2 = _interopRequireDefault(_svOAuthInterceptor);
 
-	var _rmLogin = __webpack_require__(8);
+	var _rmLogin = __webpack_require__(7);
 
 	var _rmLogin2 = _interopRequireDefault(_rmLogin);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/*import 'ngStorage';*/
 	exports.default = _angular2.default.module('relaymark.oauth2', ['ngStorage']).provider('svOAuth2', _svOAuth2.default).provider('svOAuthStorage', _svOAuthStorage2.default).provider('svOAuthInterceptor', _svOAuthInterceptor2.default).factory('svQueryStringHelper', _svQueryStringHelper2.default).factory('svHttpBuffer', _svHttpBuffer2.default).directive('rmLogin', _rmLogin2.default).name;
 
 /***/ },
@@ -92,12 +91,6 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	module.exports = ngStorage;
-
-/***/ },
-/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -272,7 +265,7 @@
 	exports.default = svOAuth2;
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -388,7 +381,7 @@
 	exports.default = svOAuthStorage;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -480,7 +473,7 @@
 	}
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -573,7 +566,7 @@
 	}
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -707,7 +700,7 @@
 	exports.default = svOAuthInterceptor;
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -717,11 +710,11 @@
 	});
 	exports.default = rmLogin;
 
-	var _rmLogin = __webpack_require__(9);
+	var _rmLogin = __webpack_require__(8);
 
 	var _rmLogin2 = _interopRequireDefault(_rmLogin);
 
-	var _rmLoginController = __webpack_require__(10);
+	var _rmLoginController = __webpack_require__(9);
 
 	var _rmLoginController2 = _interopRequireDefault(_rmLoginController);
 
@@ -745,7 +738,7 @@
 	}
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	var path = 'D:/ProjetGit/RelaymarkGitPublic/Relaymark.oauth2/src/directives/rmLogin/rmLogin.html';
@@ -754,7 +747,7 @@
 	module.exports = path;
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';

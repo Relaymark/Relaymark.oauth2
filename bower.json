@@ -1,6 +1,6 @@
 {
   "name": "relaymark.oauth2",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Relaymark service to use OAuth2 authentification in authorization code flow.",
   "main": "./dist/relaymark.oauth2.js",
   "authors": [
