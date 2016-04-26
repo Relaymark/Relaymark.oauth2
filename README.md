@@ -24,8 +24,7 @@ This is a list of configuration which you can override
       export default function config(AppConstants,  $httpProvider, svOAuth2Provider, svOAuthInterceptorProvider) {
       
         svOAuthInterceptorProvider.configure({endpointUrl : AppConstants.ENDPOINT_API}); //If your Api sends you an 400 or 401 See Interceptors
-        $httpProvider.interceptors.push('svOAuthInterceptor');
-        $httpProvider.interceptors.push('svServerDateResponseInterceptor');
+        $httpProvider.interceptors.push('svOAuthInterceptor'); 
         
         svOAuth2Provider.configure({
           baseUrl: AppConstants.ENDPOINT_AUTH,
@@ -41,8 +40,7 @@ This is a list of configuration which you can override
       .module('YourAwesomeApp')
       .config(function(svOAuth2Provider, AppConstants, $httpProvider) { 
       svOAuthInterceptorProvider.configure({endpointUrl : AppConstants.ENDPOINT_API}); //If your Api sends you an 400 or 401 See Interceptors
-      $httpProvider.interceptors.push('svOAuthInterceptor');
-      $httpProvider.interceptors.push('svServerDateResponseInterceptor');
+      $httpProvider.interceptors.push('svOAuthInterceptor'); 
         svOAuth2Provider.configure({
           baseUrl: AppConstants.ENDPOINT_AUTH,
           clientId: AppConstants.AUTH_CLIENT_ID,
@@ -110,9 +108,18 @@ When the server send you back to your callback url, ask for an access token :
       }
     }
     OAuthController.$inject = ['$state', 'svOAuth2']; 
-    
+  
+##Interceptors
+svOAuthInterceptor is a service which catch the responses from an url (your api server for instance). 
+
+If the server responds with 400 with the message "invalid_request" or "invalid_grant", it will emit an event "oauth:error" and removes the token.
+
+If the server responds with 401 with the status text "Unauthorized", it will renew the token and retried the call. But if it's failed, it will emit an event "oauth:loginRequired"  
+
+If the server does not respond (status 0 or -1), it will emit an event "oauth:apiOffline".
     
 ##Rm-login directive 
 In case of you want a login button (with inscription and lost password) you can use this directive :
 
     <rm-login rm-create-account-url="url-to-your-inscription.domain.com"  rm-forgot-password-url="url-to-your-lost-password.domain.com"></rm-login>
+    
