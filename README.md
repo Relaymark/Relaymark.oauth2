@@ -5,6 +5,7 @@ Finally we made ours and we decide to provide it to the community ! Yeah !
 
 ##Angular module config
 This is a list of configuration which you can override
+
     defaults = {
       baseUrl: null,  //required Main path to your server
       clientId: null, //required 
