@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("angular"), require("ngStorage"));
+	else if(typeof define === 'function' && define.amd)
+		define(["angular", "ngStorage"], factory);
+	else if(typeof exports === 'object')
+		exports["relaymark.oauth2"] = factory(require("angular"), require("ngStorage"));
+	else
+		root["relaymark.oauth2"] = factory(root["angular"], root["ngStorage"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -50,47 +60,209 @@
 	    value: true
 	});
 
-	var _angular = __webpack_require__(1);
+	var _angular = __webpack_require__(9);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _svOAuth = __webpack_require__(2);
+	__webpack_require__(10);
+
+	var _svOAuth = __webpack_require__(4);
 
 	var _svOAuth2 = _interopRequireDefault(_svOAuth);
 
-	var _svOAuthStorage = __webpack_require__(3);
+	var _svOAuthStorage = __webpack_require__(6);
 
 	var _svOAuthStorage2 = _interopRequireDefault(_svOAuthStorage);
 
-	var _svQueryStringHelper = __webpack_require__(4);
+	var _svQueryStringHelper = __webpack_require__(7);
 
 	var _svQueryStringHelper2 = _interopRequireDefault(_svQueryStringHelper);
 
-	var _svHttpBuffer = __webpack_require__(5);
+	var _svHttpBuffer = __webpack_require__(3);
 
 	var _svHttpBuffer2 = _interopRequireDefault(_svHttpBuffer);
 
-	var _svOAuthInterceptor = __webpack_require__(6);
+	var _svOAuthInterceptor = __webpack_require__(5);
 
 	var _svOAuthInterceptor2 = _interopRequireDefault(_svOAuthInterceptor);
 
-	var _rmLogin = __webpack_require__(7);
+	var _rmLogin = __webpack_require__(2);
 
 	var _rmLogin2 = _interopRequireDefault(_rmLogin);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/*import 'ngStorage';*/
 	exports.default = _angular2.default.module('relaymark.oauth2', ['ngStorage']).provider('svOAuth2', _svOAuth2.default).provider('svOAuthStorage', _svOAuthStorage2.default).provider('svOAuthInterceptor', _svOAuthInterceptor2.default).factory('svQueryStringHelper', _svQueryStringHelper2.default).factory('svHttpBuffer', _svHttpBuffer2.default).directive('rmLogin', _rmLogin2.default).name;
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	module.exports = angular;
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var rmLoginController = function rmLoginController(svOAuthStorage, svOAuth2, $rootScope) {
+	  _classCallCheck(this, rmLoginController);
+
+	  //var defaultRememberMe = true;
+
+	  var rmLoginVm = this;
+	  rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
+
+	  rmLoginVm.login = function () {
+	    svOAuth2.getAccessCode();
+	  };
+
+	  rmLoginVm.logout = function () {
+	    svOAuth2.revokeToken().then(function () {
+	      rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
+	      $rootScope.$broadcast('oauth:logout');
+	    });
+	  };
+	};
+
+	exports.default = rmLoginController;
+
+	rmLoginController.$inject = ['svOAuthStorage', 'svOAuth2', '$rootScope'];
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = rmLogin;
+
+	var _rmLogin = __webpack_require__(8);
+
+	var _rmLogin2 = _interopRequireDefault(_rmLogin);
+
+	var _rmLoginController = __webpack_require__(1);
+
+	var _rmLoginController2 = _interopRequireDefault(_rmLoginController);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function rmLogin() {
+	  return {
+	    restrict: 'E',
+	    replace: true,
+	    transclude: true,
+	    templateUrl: _rmLogin2.default,
+	    controller: _rmLoginController2.default,
+	    scope: {},
+	    bindToController: {
+	      createAccountUrl: '=rmCreateAccountUrl',
+	      forgotPasswordUrl: '=rmForgotPasswordUrl'
+	    },
+	    controllerAs: 'rmLoginCtr'
+
+	  };
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = svHttpBuffer;
+	svHttpBuffer.$inject = ['$injector'];
+	function svHttpBuffer($injector) {
+
+	  var buffer = [];
+
+	  /** Service initialized later because of circular dependency problem. */
+	  var $http;
+
+	  var retryHttpRequest = function retryHttpRequest(config, deferred) {
+	    function successCallback(response) {
+	      deferred.resolve(response);
+	    }
+
+	    function errorCallback(response) {
+
+	      deferred.reject(response);
+	    }
+
+	    $http = $http || $injector.get('$http');
+	    $http(config).then(successCallback, errorCallback);
+	  };
+
+	  return {
+	    /**
+	     * @ngdoc method
+	     * @name append
+	     * @methodOf relaymark.shared.svHttpBuffer
+	     * @kind function
+	     * @description
+	     * Appends HTTP request configuration object with deferred response attached to buffer.
+	     *
+	     * @param {object} config Request to append
+	     * @param {deferred} deferred Promise deferred.
+	     */
+
+	    append: function append(config, deferred) {
+	      buffer.push({
+	        config: config,
+	        deferred: deferred
+	      });
+	    },
+
+
+	    /**
+	     * @ngdoc method
+	     * @name rejectAll
+	     * @methodOf relaymark.shared.svHttpBuffer
+	     * @kind function
+	     * @description
+	     * Abandon or reject (if reason provided) all the buffered requests.
+	     *
+	     * @param {string} reason Reason to reject
+	     */
+	    rejectAll: function rejectAll(reason) {
+	      if (reason) {
+	        for (var i = 0; i < buffer.length; ++i) {
+	          buffer[i].deferred.reject(reason);
+	        }
+	      }
+	      buffer = [];
+	    },
+
+
+	    /**
+	     * @ngdoc method
+	     * @name retryAll
+	     * @methodOf relaymark.shared.svHttpBuffer
+	     * @kind function
+	     * @description
+	     * Retries all the buffered requests clears the buffer.
+	     *
+	     * @param {function} updater Function which can update the url request (example: updating authorization header).
+	     */
+	    retryAll: function retryAll(updater) {
+
+	      for (var i = 0; i < buffer.length; ++i) {
+	        retryHttpRequest(updater(buffer[i].config), buffer[i].deferred);
+	      }
+	      buffer = [];
+	    }
+	  };
+	}
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -113,7 +285,8 @@
 	    authorizePath: '/connect/authorize',
 	    grantPath: '/connect/token',
 	    revokePath: '/connect/revocation',
-	    redirectUri: null
+	    redirectUri: null,
+	    endSession: '/connect/endsession'
 	  };
 	  this.requiredKeys = ['baseUrl', 'clientSecret', 'scope', 'grantPath', 'revokePath'];
 
@@ -146,6 +319,10 @@
 	    // Add `revokePath` facing slash.
 	    if (this.config.revokePath[0] !== '/') {
 	      this.config.revokePath = '/' + this.config.revokePath;
+	    }
+	    // Add `endSession` facing slash.
+	    if (this.config.endSession[0] !== '/') {
+	      this.config.endSession = '/' + this.config.endSession;
 	    }
 	    return this.config;
 	  };
@@ -242,6 +419,9 @@
 	      deferred.promise.then(function () {
 	        svOAuthStorage.removeCode();
 	        svOAuthStorage.removeToken();
+
+	        var url = config.baseUrl + '' + config.endSession;
+	        window.location = url;
 	      });
 	      deferred.resolve();
 	      return deferred.promise;
@@ -265,308 +445,7 @@
 	exports.default = svOAuth2;
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var svOAuthStorage = function () {
-	    function svOAuthStorage() {
-	        _classCallCheck(this, svOAuthStorage);
-
-	        this.config = {
-	            name: 'token'
-	        };
-
-	        this.$get = function ($localStorage) {
-	            var self = {};
-	            var config = this.config;
-
-	            self.applySlidingStorage = function () {
-	                var result = $localStorage.token;
-	                //if sliding exp. is required => set the cookie again.
-	                if (result && result.lastOptions && result.lastOptions.sliding && result.lastOptions.sliding === true) {
-	                    self.removeToken();
-	                    self.setToken(result.data, result.lastOptions.remember);
-	                }
-	            };
-
-	            self.getToken = function () {
-	                return $localStorage[config.name];
-	            };
-
-	            self.setToken = function (data) {
-	                $localStorage[config.name] = data;
-	                return $localStorage[config.name];
-	            };
-
-	            self.getAuthorizationHeader = function () {
-	                var token = self.getToken();
-	                if (!token) {
-	                    return;
-	                }
-
-	                var tokenType = token['token_type'];
-	                var accessToken = token['access_token'];
-	                if (!(tokenType && accessToken)) {
-	                    return;
-	                }
-
-	                var result = '' + (tokenType.charAt(0).toUpperCase() + tokenType.substr(1)) + ' ' + accessToken;
-	                return result;
-	            };
-
-	            self.getAccessToken = function () {
-	                var token = self.getToken();
-	                return token ? token['access_token'] : undefined;
-	            };
-
-	            self.getTokenType = function () {
-	                var token = self.getToken();
-	                return token ? token['token_type'] : undefined;
-	            };
-
-	            self.getRefreshToken = function () {
-	                var token = self.getToken();
-	                return token ? token['refresh_token'] : undefined;
-	            };
-
-	            self.removeToken = function () {
-	                delete $localStorage[config.name];
-	            };
-
-	            self.removeCode = function () {
-	                delete $localStorage.oauth_code;
-	            };
-	            self.setCode = function (code) {
-	                $localStorage.oauth_code = code;
-	                return $localStorage.oauth_code;
-	            };
-	            self.getCode = function () {
-	                return $localStorage.oauth_code;
-	            };
-
-	            return self;
-	        };
-	        this.$get.$inject = ['$localStorage'];
-	    }
-
-	    _createClass(svOAuthStorage, [{
-	        key: 'configure',
-	        value: function configure(params) {
-	            // Check if is an `object`.
-	            if (!(params instanceof Object)) {
-	                throw new TypeError('Invalid argument: `config` must be an `Object`.');
-	            }
-	            // Extend default configuration.
-	            angular.extend(this.config, params);
-	            return this.config;
-	        }
-
-	        /*@ngInject*/
-
-	    }]);
-
-	    return svOAuthStorage;
-	}();
-
-	exports.default = svOAuthStorage;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = svQueryStringHelper;
-	/**
-	 * @ngdoc service
-	 * @name relaymark.shared.svQueryStringHelper
-	 * @description
-	 * svQueryStringHelper is a helper which parse a query string to an object. It can also stringify an object to a string.
-	 *
-	 */
-	function svQueryStringHelper() {
-	  return {
-	    /**
-	     * @ngdoc method
-	     * @name svQueryStringHelper#parse
-	     * @methodOf relaymark.shared.svQueryStringHelper
-	     * @kind function
-	     * @description
-	     * Parse a query string to an object.
-	     *
-	     * @param {string} str Query string to parse
-	     * @returns {object} Object formed from the query string.
-	     */
-
-	    parse: function parse(str) {
-	      if (typeof str !== 'string') {
-	        return {};
-	      }
-
-	      str = str.trim().replace(/^(\?|#)/, '');
-
-	      if (!str) {
-	        return {};
-	      }
-
-	      return str.trim().split('&').reduce(function (ret, param) {
-	        var parts = param.replace(/\+/g, ' ').split('=');
-	        var key = parts[0];
-	        var val = parts[1];
-
-	        key = decodeURIComponent(key);
-	        // missing `=` should be `null`:
-	        // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
-	        val = val === undefined ? null : decodeURIComponent(val);
-
-	        if (!ret.hasOwnProperty(key)) {
-	          ret[key] = val;
-	        } else if (Array.isArray(ret[key])) {
-	          ret[key].push(val);
-	        } else {
-	          ret[key] = [ret[key], val];
-	        }
-
-	        return ret;
-	      });
-	    },
-
-
-	    /**
-	     * @ngdoc method
-	     * @name svQueryStringHelper#stringify
-	     * @methodOf relaymark.shared.svQueryStringHelper
-	     * @kind function
-	     * @description
-	     * Stringify an object to a query string.
-	     *
-	     * @param {string} obj Object to parse
-	     * @returns {string} Query string
-	     */
-	    stringify: function stringify(obj) {
-	      return obj ? Object.keys(obj).map(function (key) {
-	        var val = obj[key];
-
-	        if (Array.isArray(val)) {
-	          return val.map(function (val2) {
-	            return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
-	          }).join('&');
-	        }
-
-	        return encodeURIComponent(key) + '=' + encodeURIComponent(val);
-	      }).join('&') : '';
-	    }
-	  };
-	}
-
-/***/ },
 /* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = svHttpBuffer;
-	svHttpBuffer.$inject = ['$injector'];
-	function svHttpBuffer($injector) {
-
-	  var buffer = [];
-
-	  /** Service initialized later because of circular dependency problem. */
-	  var $http;
-
-	  var retryHttpRequest = function retryHttpRequest(config, deferred) {
-	    function successCallback(response) {
-	      deferred.resolve(response);
-	    }
-
-	    function errorCallback(response) {
-
-	      deferred.reject(response);
-	    }
-
-	    $http = $http || $injector.get('$http');
-	    $http(config).then(successCallback, errorCallback);
-	  };
-
-	  return {
-	    /**
-	     * @ngdoc method
-	     * @name append
-	     * @methodOf relaymark.shared.svHttpBuffer
-	     * @kind function
-	     * @description
-	     * Appends HTTP request configuration object with deferred response attached to buffer.
-	     *
-	     * @param {object} config Request to append
-	     * @param {deferred} deferred Promise deferred.
-	     */
-
-	    append: function append(config, deferred) {
-	      buffer.push({
-	        config: config,
-	        deferred: deferred
-	      });
-	    },
-
-
-	    /**
-	     * @ngdoc method
-	     * @name rejectAll
-	     * @methodOf relaymark.shared.svHttpBuffer
-	     * @kind function
-	     * @description
-	     * Abandon or reject (if reason provided) all the buffered requests.
-	     *
-	     * @param {string} reason Reason to reject
-	     */
-	    rejectAll: function rejectAll(reason) {
-	      if (reason) {
-	        for (var i = 0; i < buffer.length; ++i) {
-	          buffer[i].deferred.reject(reason);
-	        }
-	      }
-	      buffer = [];
-	    },
-
-
-	    /**
-	     * @ngdoc method
-	     * @name retryAll
-	     * @methodOf relaymark.shared.svHttpBuffer
-	     * @kind function
-	     * @description
-	     * Retries all the buffered requests clears the buffer.
-	     *
-	     * @param {function} updater Function which can update the url request (example: updating authorization header).
-	     */
-	    retryAll: function retryAll(updater) {
-
-	      for (var i = 0; i < buffer.length; ++i) {
-	        retryHttpRequest(updater(buffer[i].config), buffer[i].deferred);
-	      }
-	      buffer = [];
-	    }
-	  };
-	}
-
-/***/ },
-/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -700,40 +579,210 @@
 	exports.default = svOAuthInterceptor;
 
 /***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var svOAuthStorage = function () {
+	    function svOAuthStorage() {
+	        _classCallCheck(this, svOAuthStorage);
+
+	        this.config = {
+	            name: 'token'
+	        };
+
+	        this.$get = function ($localStorage) {
+	            var self = {};
+	            var config = this.config;
+
+	            self.applySlidingStorage = function () {
+	                var result = $localStorage.token;
+	                //if sliding exp. is required => set the cookie again.
+	                if (result && result.lastOptions && result.lastOptions.sliding && result.lastOptions.sliding === true) {
+	                    self.removeToken();
+	                    self.setToken(result.data, result.lastOptions.remember);
+	                }
+	            };
+
+	            self.getToken = function () {
+	                return $localStorage[config.name];
+	            };
+
+	            self.setToken = function (data) {
+	                $localStorage[config.name] = data;
+	                return $localStorage[config.name];
+	            };
+
+	            self.getAuthorizationHeader = function () {
+	                var token = self.getToken();
+	                if (!token) {
+	                    return;
+	                }
+
+	                var tokenType = token['token_type'];
+	                var accessToken = token['access_token'];
+	                if (!(tokenType && accessToken)) {
+	                    return;
+	                }
+
+	                var result = '' + (tokenType.charAt(0).toUpperCase() + tokenType.substr(1)) + ' ' + accessToken;
+	                return result;
+	            };
+
+	            self.getAccessToken = function () {
+	                var token = self.getToken();
+	                return token ? token['access_token'] : undefined;
+	            };
+
+	            self.getTokenType = function () {
+	                var token = self.getToken();
+	                return token ? token['token_type'] : undefined;
+	            };
+
+	            self.getRefreshToken = function () {
+	                var token = self.getToken();
+	                return token ? token['refresh_token'] : undefined;
+	            };
+
+	            self.removeToken = function () {
+	                delete $localStorage[config.name];
+	            };
+
+	            self.removeCode = function () {
+	                delete $localStorage.oauth_code;
+	            };
+	            self.setCode = function (code) {
+	                $localStorage.oauth_code = code;
+	                return $localStorage.oauth_code;
+	            };
+	            self.getCode = function () {
+	                return $localStorage.oauth_code;
+	            };
+
+	            return self;
+	        };
+	        this.$get.$inject = ['$localStorage'];
+	    }
+
+	    _createClass(svOAuthStorage, [{
+	        key: 'configure',
+	        value: function configure(params) {
+	            // Check if is an `object`.
+	            if (!(params instanceof Object)) {
+	                throw new TypeError('Invalid argument: `config` must be an `Object`.');
+	            }
+	            // Extend default configuration.
+	            angular.extend(this.config, params);
+	            return this.config;
+	        }
+
+	        /*@ngInject*/
+
+	    }]);
+
+	    return svOAuthStorage;
+	}();
+
+	exports.default = svOAuthStorage;
+
+/***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = rmLogin;
-
-	var _rmLogin = __webpack_require__(8);
-
-	var _rmLogin2 = _interopRequireDefault(_rmLogin);
-
-	var _rmLoginController = __webpack_require__(9);
-
-	var _rmLoginController2 = _interopRequireDefault(_rmLoginController);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function rmLogin() {
+	exports.default = svQueryStringHelper;
+	/**
+	 * @ngdoc service
+	 * @name relaymark.shared.svQueryStringHelper
+	 * @description
+	 * svQueryStringHelper is a helper which parse a query string to an object. It can also stringify an object to a string.
+	 *
+	 */
+	function svQueryStringHelper() {
 	  return {
-	    restrict: 'E',
-	    replace: true,
-	    transclude: true,
-	    templateUrl: _rmLogin2.default,
-	    controller: _rmLoginController2.default,
-	    scope: {},
-	    bindToController: {
-	      createAccountUrl: '=rmCreateAccountUrl',
-	      forgotPasswordUrl: '=rmForgotPasswordUrl'
-	    },
-	    controllerAs: 'rmLoginCtr'
+	    /**
+	     * @ngdoc method
+	     * @name svQueryStringHelper#parse
+	     * @methodOf relaymark.shared.svQueryStringHelper
+	     * @kind function
+	     * @description
+	     * Parse a query string to an object.
+	     *
+	     * @param {string} str Query string to parse
+	     * @returns {object} Object formed from the query string.
+	     */
 
+	    parse: function parse(str) {
+	      if (typeof str !== 'string') {
+	        return {};
+	      }
+
+	      str = str.trim().replace(/^(\?|#)/, '');
+
+	      if (!str) {
+	        return {};
+	      }
+
+	      return str.trim().split('&').reduce(function (ret, param) {
+	        var parts = param.replace(/\+/g, ' ').split('=');
+	        var key = parts[0];
+	        var val = parts[1];
+
+	        key = decodeURIComponent(key);
+	        // missing `=` should be `null`:
+	        // http://w3.org/TR/2012/WD-url-20120524/#collect-url-parameters
+	        val = val === undefined ? null : decodeURIComponent(val);
+
+	        if (!ret.hasOwnProperty(key)) {
+	          ret[key] = val;
+	        } else if (Array.isArray(ret[key])) {
+	          ret[key].push(val);
+	        } else {
+	          ret[key] = [ret[key], val];
+	        }
+
+	        return ret;
+	      });
+	    },
+
+
+	    /**
+	     * @ngdoc method
+	     * @name svQueryStringHelper#stringify
+	     * @methodOf relaymark.shared.svQueryStringHelper
+	     * @kind function
+	     * @description
+	     * Stringify an object to a query string.
+	     *
+	     * @param {string} obj Object to parse
+	     * @returns {string} Query string
+	     */
+	    stringify: function stringify(obj) {
+	      return obj ? Object.keys(obj).map(function (key) {
+	        var val = obj[key];
+
+	        if (Array.isArray(val)) {
+	          return val.map(function (val2) {
+	            return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
+	          }).join('&');
+	        }
+
+	        return encodeURIComponent(key) + '=' + encodeURIComponent(val);
+	      }).join('&') : '';
+	    }
 	  };
 	}
 
@@ -750,37 +799,15 @@
 /* 9 */
 /***/ function(module, exports) {
 
-	'use strict';
+	module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var rmLoginController = function rmLoginController(svOAuthStorage, svOAuth2, $rootScope) {
-	  _classCallCheck(this, rmLoginController);
-
-	  //var defaultRememberMe = true;
-
-	  var rmLoginVm = this;
-	  rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
-
-	  rmLoginVm.login = function () {
-	    svOAuth2.getAccessCode();
-	  };
-
-	  rmLoginVm.logout = function () {
-	    svOAuth2.revokeToken().then(function () {
-	      rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
-	      $rootScope.$broadcast('oauth:logout');
-	    });
-	  };
-	};
-
-	exports.default = rmLoginController;
-
-	rmLoginController.$inject = ['svOAuthStorage', 'svOAuth2', '$rootScope'];
+	module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;

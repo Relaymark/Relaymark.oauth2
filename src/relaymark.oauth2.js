@@ -1,6 +1,6 @@
 
 import angular from 'angular';
-/*import 'ngStorage';*/
+import 'ngStorage';
 import svOAuth2 from './services/svOAuth2';
 import svOAuthStorage from './services/svOAuthStorage';
 import svQueryStringHelper from './services/svQueryStringHelper';

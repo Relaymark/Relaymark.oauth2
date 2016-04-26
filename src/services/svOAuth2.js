@@ -10,7 +10,8 @@ class svOAuth2 {
       authorizePath: '/connect/authorize',
       grantPath: '/connect/token',
       revokePath: '/connect/revocation',
-      redirectUri: null
+      redirectUri: null,
+      endSession: '/connect/endsession'
     };
     this.requiredKeys = ['baseUrl', 'clientSecret', 'scope', 'grantPath', 'revokePath'];
 
@@ -44,6 +45,10 @@ class svOAuth2 {
       // Add `revokePath` facing slash.
       if (this.config.revokePath[0] !== '/') {
         this.config.revokePath = '/' + this.config.revokePath;
+      }
+      // Add `endSession` facing slash.
+      if (this.config.endSession[0] !== '/') {
+        this.config.endSession = '/' + this.config.endSession;
       }
       return this.config;
     };
@@ -146,6 +151,9 @@ class svOAuth2 {
         deferred.promise.then(function () {
           svOAuthStorage.removeCode();
           svOAuthStorage.removeToken();
+
+          var url = config.baseUrl + '' + config.endSession;
+          window.location = url;
         });
         deferred.resolve();
         return deferred.promise;
