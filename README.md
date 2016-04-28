@@ -3,8 +3,10 @@
 At Relaymark, we are using OAuth2, and we searched a nice angular module which uses the Authorization Code Flow properly. 
 Finally we made ours and we decide to provide it to the community ! Yeah !
 
+The module name is : angular.module('YourAwesomeApp', ['relaymark.oauth2'])
+
 ##Angular module config
-This is a list of configuration which you can override
+This is a list of configuration which you can override :
 
     defaults = {
       baseUrl: null,  //required Main path to your server
@@ -37,7 +39,7 @@ This is a list of configuration which you can override
 
 ###Angular 1.x
     angular
-      .module('YourAwesomeApp')
+      .module('YourAwesomeApp', ['relaymark.oauth2'])
       .config(function(svOAuth2Provider, AppConstants, $httpProvider) { 
       svOAuthInterceptorProvider.configure({endpointUrl : AppConstants.ENDPOINT_API}); //If your Api sends you an 400 or 401 See Interceptors
       $httpProvider.interceptors.push('svOAuthInterceptor'); 
@@ -82,7 +84,7 @@ When the server send you back to your callback url, ask for an access token :
 
 ###Angular 1.x
     angular.module('YourAwesomeApp')
-      .controller('CallbackController', function (svOAuth2) {
+      .controller('CallbackController', function ($state, svOAuth2) {
         svOAuth2.getAccessToken($state.params.code).then(function () {
           $state.go('main');
         }, function (failed) {
