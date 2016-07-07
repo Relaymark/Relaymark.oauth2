@@ -17,8 +17,14 @@ This is a list of configuration which you can override :
       grantPath: '/connect/token',
       revokePath: '/connect/revocation',
       redirectUri: null, //required Callback uri to your app when the user get the Authorization Code (remind to ask for a Token)
-      endSession: '/connect/endsession'
+      endSession: '/connect/endsession',
+      logoutRedirectUri: null 
     };
+    
+About logoutRedirectUri:
+Your auth server will redirect to this url. 
+You must add 'openid' in scope. 
+Do not forget to add your url in PostLogoutRedirectUris on the client document (stored in your db, we guess).
     
 ###In ES 6
     config.$inject = ['AppConstants', '$httpProvider', 'svOAuth2Provider'];
