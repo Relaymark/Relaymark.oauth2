@@ -125,11 +125,7 @@ If the server responds with 400 with the message "invalid_request" or "invalid_g
 If the server responds with 401 with the status text "Unauthorized", it will renew the token and retried the call. But if it's failed, it will emit an event "oauth:loginRequired"  
 
 If the server does not respond (status 0 or -1), it will emit an event "oauth:apiOffline".
-    
-##Rm-login directive 
-In case of you want a login button (with inscription and lost password) you can use this directive :
 
-    <rm-login rm-create-account-url="url-to-your-inscription.domain.com"  rm-forgot-password-url="url-to-your-lost-password.domain.com"></rm-login>
 
 ##Deploy
 
