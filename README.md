@@ -130,4 +130,14 @@ If the server does not respond (status 0 or -1), it will emit an event "oauth:ap
 In case of you want a login button (with inscription and lost password) you can use this directive :
 
     <rm-login rm-create-account-url="url-to-your-inscription.domain.com"  rm-forgot-password-url="url-to-your-lost-password.domain.com"></rm-login>
+
+##Deploy
+
+    git commit -am "Your changes..."
+    npm version patch
+
+Update bower.json version
     
+    git tag -a vX.X.X -m "Release version X.X.X"
+    git push origin master --tags
+    npm publish
