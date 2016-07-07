@@ -7,18 +7,19 @@
 
 
 declare module 'relaymark.oauth2' {
-    export type ISvOAuth2 = angular.relaymark.oauth2.ISvOAuth2;
-    export type ISvOAuth2Provider = angular.relaymark.oauth2.ISvOAuth2Provider;
-    export type ISvOAuthStorage = angular.relaymark.oauth2.ISvOAuthStorage;
-    export type ISvOAuthStorageProvider = angular.relaymark.oauth2.ISvOAuthStorageProvider;
-    export type ISvOAuthInterceptor = angular.relaymark.oauth2.ISvOAuthInterceptor;
-    export type ISvOAuthInterceptorProvider = angular.relaymark.oauth2.ISvOAuthInterceptorProvider;
-    export type ISvQueryStringHelper = angular.relaymark.oauth2.ISvQueryStringHelper;
-    export type ISvHttpBuffer = angular.relaymark.oauth2.ISvHttpBuffer;
+    export type IOAuth2Service = angular.relaymark.oauth2.IOAuth2Service;
+    export type IOAuth2ServiceProvider = angular.relaymark.oauth2.IOAuth2ServiceProvider;
+    export type IOAuthStorageService = angular.relaymark.oauth2.IOAuthStorageService;
+    export type IOAuthStorageServiceProvider = angular.relaymark.oauth2.IOAuthStorageServiceProvider;
+    export type IOAuthInterceptor = angular.relaymark.oauth2.IOAuthInterceptor;
+    export type IOAuthInterceptorServiceProvider = angular.relaymark.oauth2.IOAuthInterceptorServiceProvider;
+    export type IQueryStringHelperService = angular.relaymark.oauth2.IQueryStringHelperService;
+    export type IHttpBufferService = angular.relaymark.oauth2.IHttpBufferService;
+    export type IConfigOAuth2 = angular.relaymark.oauth2.IConfigOAuth2;
 }
 
 declare namespace angular.relaymark.oauth2{
-    interface ISvOAuth2{
+    interface IOAuth2Service{
         isAuthenticated(): boolean;
         getAccessCode(): void;
         getAccessToken(code: string, options?: angular.IRequestShortcutConfig): angular.IPromise<any>;
@@ -37,12 +38,12 @@ declare namespace angular.relaymark.oauth2{
         endSession?: string;
         logoutRedirectUri?: string
     }
-    interface ISvOAuth2Provider  extends angular.IServiceProvider{
+    interface IOAuth2ServiceProvider  extends angular.IServiceProvider{
         defaults: IConfigOAuth2;
         requiredKeys: Array<string>;
         configure(params: IConfigOAuth2): IConfigOAuth2;
     }
-    interface ISvOAuthStorage{
+    interface IOAuthStorageService{
         applySlidingStorage():void;
         getToken():any;
         setToken(data:any):any;
@@ -55,24 +56,24 @@ declare namespace angular.relaymark.oauth2{
         setCode(code: string):any;
         getCode():any;
     }
-    interface ISvOAuthStorageProvider extends angular.IServiceProvider{
+    interface IOAuthStorageServiceProvider extends angular.IServiceProvider{
         config: any;
         configure(params:any): any;
     }
-    interface ISvOAuthInterceptor{
+    interface IOAuthInterceptor{
         request(config: any): any;
         responseError(rejection: any): angular.IPromise<any>;
     }
-    interface ISvOAuthInterceptorProvider extends angular.IServiceProvider{
+    interface IOAuthInterceptorServiceProvider extends angular.IServiceProvider{
         defaults: any;
         configure(params: any): any;
     }
-    interface ISvQueryStringHelper{
+    interface IQueryStringHelperService{
         parse(str: string): any;
         stringify(obj: any): string;
     }
-    interface ISvHttpBuffer{
-        append(config: any, deferred: angular.IDeferred): void;
+    interface IHttpBufferService{
+        append(config: any, deferred: angular.IDeferred<any>): void;
         rejectAll(reason: string): void;
         retryAll(updater: any): void;
     }
