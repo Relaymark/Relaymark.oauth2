@@ -7,7 +7,7 @@
 		exports["relaymark.oauth2"] = factory(require("angular"), require("ngStorage"));
 	else
 		root["relaymark.oauth2"] = factory(root["angular"], root["ngStorage"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -60,116 +60,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
-	var _angular = __webpack_require__(9);
+	var _angular = __webpack_require__(6);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	__webpack_require__(10);
+	__webpack_require__(7);
 
-	var _svOAuth = __webpack_require__(4);
+	var _svOAuth = __webpack_require__(2);
 
 	var _svOAuth2 = _interopRequireDefault(_svOAuth);
 
-	var _svOAuthStorage = __webpack_require__(6);
+	var _svOAuthStorage = __webpack_require__(4);
 
 	var _svOAuthStorage2 = _interopRequireDefault(_svOAuthStorage);
 
-	var _svQueryStringHelper = __webpack_require__(7);
+	var _svQueryStringHelper = __webpack_require__(5);
 
 	var _svQueryStringHelper2 = _interopRequireDefault(_svQueryStringHelper);
 
-	var _svHttpBuffer = __webpack_require__(3);
+	var _svHttpBuffer = __webpack_require__(1);
 
 	var _svHttpBuffer2 = _interopRequireDefault(_svHttpBuffer);
 
-	var _svOAuthInterceptor = __webpack_require__(5);
+	var _svOAuthInterceptor = __webpack_require__(3);
 
 	var _svOAuthInterceptor2 = _interopRequireDefault(_svOAuthInterceptor);
 
-	var _rmLogin = __webpack_require__(2);
-
-	var _rmLogin2 = _interopRequireDefault(_rmLogin);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module('relaymark.oauth2', ['ngStorage']).provider('svOAuth2', _svOAuth2.default).provider('svOAuthStorage', _svOAuthStorage2.default).provider('svOAuthInterceptor', _svOAuthInterceptor2.default).factory('svQueryStringHelper', _svQueryStringHelper2.default).factory('svHttpBuffer', _svHttpBuffer2.default).directive('rmLogin', _rmLogin2.default).name;
+	exports.default = _angular2.default.module('relaymark.oauth2', ['ngStorage']).provider('svOAuth2', _svOAuth2.default).provider('svOAuthStorage', _svOAuthStorage2.default).provider('svOAuthInterceptor', _svOAuthInterceptor2.default).factory('svQueryStringHelper', _svQueryStringHelper2.default).factory('svHttpBuffer', _svHttpBuffer2.default).name;
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var rmLoginController = function rmLoginController(svOAuthStorage, svOAuth2, $rootScope) {
-	  _classCallCheck(this, rmLoginController);
-
-	  //var defaultRememberMe = true;
-
-	  var rmLoginVm = this;
-	  rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
-
-	  rmLoginVm.login = function () {
-	    svOAuth2.getAccessCode();
-	  };
-
-	  rmLoginVm.logout = function () {
-	    svOAuth2.revokeToken().then(function () {
-	      rmLoginVm.isLogged = angular.isDefined(svOAuthStorage.getToken());
-	      $rootScope.$broadcast('oauth:logout');
-	    });
-	  };
-	};
-
-	exports.default = rmLoginController;
-
-	rmLoginController.$inject = ['svOAuthStorage', 'svOAuth2', '$rootScope'];
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = rmLogin;
-
-	var _rmLogin = __webpack_require__(8);
-
-	var _rmLogin2 = _interopRequireDefault(_rmLogin);
-
-	var _rmLoginController = __webpack_require__(1);
-
-	var _rmLoginController2 = _interopRequireDefault(_rmLoginController);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function rmLogin() {
-	  return {
-	    restrict: 'E',
-	    replace: true,
-	    transclude: true,
-	    templateUrl: _rmLogin2.default,
-	    controller: _rmLoginController2.default,
-	    scope: {},
-	    bindToController: {
-	      createAccountUrl: '=rmCreateAccountUrl',
-	      forgotPasswordUrl: '=rmForgotPasswordUrl'
-	    },
-	    controllerAs: 'rmLoginCtr'
-
-	  };
-	}
-
-/***/ },
-/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -262,7 +184,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 4 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -454,7 +376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = svOAuth2;
 
 /***/ },
-/* 5 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -588,7 +510,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = svOAuthInterceptor;
 
 /***/ },
-/* 6 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -704,7 +626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = svOAuthStorage;
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -796,25 +718,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 8 */
+/* 6 */
 /***/ function(module, exports) {
 
-	var path = 'D:/ProjetGit/RelaymarkGitPublic/Relaymark.oauth2/src/directives/rmLogin/rmLogin.html';
-	var html = "<div class=\"rm-login\">\n    <div class=\"btn btn-primary btn-login\" ng-click=\"rmLoginCtr.login()\" ng-show=\"!rmLoginCtr.isLogged\">\n        Sign in\n    </div>\n    <div class=\"btn btn-logout\" ng-show=\"rmLoginCtr.isLogged\" ng-click=\"rmLoginCtr.logout()\">\n        Sign out\n    </div>\n    <div class=\"m-t-lg\" ng-show=\"!rmLoginCtr.isLogged\">\n        <p class=\"text-muted text-center\">\n            <small translate>Do not have an account ?</small>\n        </p>\n        <a class=\"btn btn-sm btn-white btn-block\" href=\"{{rmLoginCtr.createAccountUrl}}\" translate>Create an account</a>\n    </div>\n</div>\n";
-	window.angular.module('ng').run(['$templateCache', function(c) { c.put(path, html) }]);
-	module.exports = path;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
 
 /***/ }
 /******/ ])
