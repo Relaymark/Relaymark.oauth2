@@ -74,13 +74,12 @@ class svOAuth2 {
                     throw new Error('You must add `openid` in your scope in order to use logoutRedirectUri.');
                 }
 
-                var url = config.baseUrl + '' + config.authorizePath +
+                window.location = config.baseUrl + '' + config.authorizePath +
                     appendChar + 'response_type=code&' +
                     'client_id=' + encodeURIComponent(config.clientId) + '&' +
                     'redirect_uri=' + encodeURIComponent(config.redirectUri) + '&' +
                     'scope=' + oAuthScope;
-
-                window.location = url;
+ 
             };
 
 
