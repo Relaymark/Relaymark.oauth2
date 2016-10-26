@@ -70,7 +70,7 @@ class svOAuth2 {
 
 
                 //logoutRedirectUri need oauthScope to have openid
-                if (angular.isDefined(config.logoutRedirectUri) && !oAuthScope.includes('openid')) {
+                if (angular.isDefined(config.logoutRedirectUri) && oAuthScope.indexOf('openid') < 0) {
                     throw new Error('You must add `openid` in your scope in order to use logoutRedirectUri.');
                 }
 

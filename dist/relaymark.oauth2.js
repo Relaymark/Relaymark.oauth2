@@ -134,7 +134,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {object} config Request to append
 	     * @param {deferred} deferred Promise deferred.
 	     */
-
 	    append: function append(config, deferred) {
 	      buffer.push({
 	        config: config,
@@ -264,8 +263,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                //eslint-disable-line
 	            oAuthScope = config.scope ? encodeURIComponent(config.scope) : ''; //if authorizePath has ? already append OAuth2 params
 
+
 	            //logoutRedirectUri need oauthScope to have openid
-	            if (angular.isDefined(config.logoutRedirectUri) && !oAuthScope.includes('openid')) {
+	            if (angular.isDefined(config.logoutRedirectUri) && oAuthScope.indexOf('openid') < 0) {
 	                throw new Error('You must add `openid` in your scope in order to use logoutRedirectUri.');
 	            }
 
@@ -655,7 +655,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {string} str Query string to parse
 	     * @returns {object} Object formed from the query string.
 	     */
-
 	    parse: function parse(str) {
 	      if (typeof str !== 'string') {
 	        return {};
