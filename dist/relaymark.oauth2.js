@@ -257,19 +257,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return angular.isDefined(svOAuthStorage.getToken());
 	        };
 
-	        var getAccessCode = function getAccessCode() {
+	        var getAccessCode = function getAccessCode(redirectUri) {
 	            var authPathHasQuery = config.authorizePath.indexOf('?') !== -1,
 	                appendChar = authPathHasQuery ? '&' : '?',
 	                //eslint-disable-line
 	            oAuthScope = config.scope ? encodeURIComponent(config.scope) : ''; //if authorizePath has ? already append OAuth2 params
-
 
 	            //logoutRedirectUri need oauthScope to have openid
 	            if (angular.isDefined(config.logoutRedirectUri) && oAuthScope.indexOf('openid') < 0) {
 	                throw new Error('You must add `openid` in your scope in order to use logoutRedirectUri.');
 	            }
 
-	            window.location = config.baseUrl + '' + config.authorizePath + appendChar + 'response_type=code&' + 'client_id=' + encodeURIComponent(config.clientId) + '&' + 'redirect_uri=' + encodeURIComponent(config.redirectUri) + '&' + 'scope=' + oAuthScope;
+	            var usedRedirectUri = config.redirectUri;
+	            if (angular.isDefined(redirectUri)) {
+	                usedRedirectUri = redirectUri;
+	            }
+
+	            window.location = config.baseUrl + '' + config.authorizePath + appendChar + 'response_type=code&' + 'client_id=' + encodeURIComponent(config.clientId) + '&' + 'redirect_uri=' + encodeURIComponent(usedRedirectUri) + '&' + 'scope=' + oAuthScope;
 	        };
 
 	        var getAccessToken = function getAccessToken(code, options) {
