@@ -88,7 +88,7 @@ export default class svOAuthInterceptor {
               (rejection.data.error === 'invalid_request' || rejection.data.error === 'invalid_grant')) {
             svOAuthInterceptorVM.svOAuthStorage.removeToken();
             $rootScope.$emit('oauth:error', rejection);
-            return svOAuthInterceptorVM.$q.reject(rejection);
+            //return svOAuthInterceptorVM.$q.reject(rejection);
           }
 
           // 401 Catch `Unauthorized` error. Token isn't removed here so it can be refreshed.
@@ -104,9 +104,10 @@ export default class svOAuthInterceptor {
             }
             else {
               svOAuthInterceptorVM.processRefreshToken(rejection, deferred);
+              return deferred.promise;
             }
 
-            return deferred.promise;
+            //return svOAuthInterceptorVM.$q.reject(rejection);
           }
 
           //must be removed from here as it's not the responsability of the oauth interceptor.
