@@ -20,7 +20,7 @@ export default class svOAuthInterceptor {
       this.config = angular.extend({}, this.defaults, params);
 
       return this.config;
-    }
+    };
 
     /*@ngInject*/
     this.$get = function($log, $q, svHttpBuffer, $rootScope, svOAuthStorage, $injector) {
@@ -98,6 +98,7 @@ export default class svOAuthInterceptor {
 
             if (!angular.isDefined(currentToken) || rejection.config.$$alreadyRetried) {
               svOAuthInterceptorVM.svOAuthStorage.removeToken();
+              svHttpBuffer.rejectAll('refreshTokenFailed');
               $log.warn('loginRequired');
               $rootScope.$emit('oauth:loginRequired', rejection);
             }
@@ -108,10 +109,11 @@ export default class svOAuthInterceptor {
             return deferred.promise;
           }
 
+          //must be removed from here as it's not the responsability of the oauth interceptor.
           // Catch API Offline cases
-          if (rejection.status === 0 || rejection.status === -1) {
-            $rootScope.$emit('oauth:apiOffline', rejection);
-          }
+          // if (rejection.status === 0 || rejection.status === -1) {
+          //   $rootScope.$emit('oauth:apiOffline', rejection);
+          // }
 
           //default behaviour
           return svOAuthInterceptorVM.$q.reject(rejection);

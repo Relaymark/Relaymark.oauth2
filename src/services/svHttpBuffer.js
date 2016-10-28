@@ -12,7 +12,6 @@ export default function svHttpBuffer($injector) {
     }
 
     function errorCallback(response) {
-
       deferred.reject(response);
     }
 
