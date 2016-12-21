@@ -393,8 +393,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	var svOAuthInterceptor = function svOAuthInterceptor() {
 	  _classCallCheck(this, svOAuthInterceptor);
 
+	  var self = this;
 	  this.defaults = {
-	    endpointUrl: ''
+	    endpointUrls: []
+	  };
+
+	  this.isAConfiguredEndpointUrl = function (url, configuredUrls) {
+	    var i = 0;
+	    while (i < configuredUrls.length) {
+	      if (url.indexOf(configuredUrls[i])) {
+	        return true;
+	      }
+	      ++i;
+	    }
+	    return false;
 	  };
 
 	  this.configure = function (params) {
@@ -406,8 +418,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!(params instanceof Object)) {
 	      throw new TypeError('Invalid argument: `config` must be an `Object`.');
 	    }
-	    if (!angular.isDefined(params.endpointUrl)) {
-	      throw new Error('endpointUrl MUST be defined');
+	    if (!angular.isDefined(params.endpointUrls)) {
+	      throw new Error('endpointUrls MUST be defined');
 	    }
 	    // Extend default configuration.
 	    this.config = angular.extend({}, this.defaults, params);
@@ -420,7 +432,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var waitHandle;
 	    var svOAuthInterceptorVM = this;
 	    if (!angular.isDefined(this.config)) {
-	      throw new Error("Please configure svOAuthInterceptor by using : svOAuthInterceptorProvider.configure({endpointUrl : 'http://api.domain.com'}); in your config module");
+	      throw new Error("Please configure svOAuthInterceptor by using : svOAuthInterceptorProvider.configure({endpointUrls : ['http://api.domain.com']}); in your config module");
 	    }
 
 	    svOAuthInterceptorVM.processRefreshToken = function (rejection, deferred) {
@@ -454,13 +466,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      $injector.invoke(refresh);
 	    };
 	    svOAuthInterceptorVM.$q = $q;
-	    svOAuthInterceptorVM.endpointUrl = this.config.endpointUrl;
+	    svOAuthInterceptorVM.endpointUrls = this.config.endpointUrls;
 	    svOAuthInterceptorVM.svOAuthStorage = svOAuthStorage;
 
 	    return {
 	      request: function request(config) {
 	        var requestUrl = config.url;
-	        if (requestUrl.indexOf(svOAuthInterceptorVM.endpointUrl) === 0) {
+	        if (self.isAConfiguredEndpointUrl(requestUrl, svOAuthInterceptorVM.endpointUrls)) {
 	          //Inject `Authorization` header.
 	          var authorizationHeader = svOAuthInterceptorVM.svOAuthStorage.getAuthorizationHeader();
 
