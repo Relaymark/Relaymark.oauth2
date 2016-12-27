@@ -109,6 +109,7 @@ class svOAuth2 {
                 let promise = $http.post('' + config.baseUrl + '' + config.grantPath, data, options);
                 promise.then(function (response) {
                     svOAuthStorage.setToken(response.data, true);
+                    $rootScope.$emit('oauth:login', response.data);
                 });
                 return promise;
             };
