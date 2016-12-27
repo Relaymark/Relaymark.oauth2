@@ -249,7 +249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /*@ngInject*/
-	    this.$get = function ($http, svOAuthStorage, svQueryStringHelper, $q) {
+	    this.$get = function ($http, svOAuthStorage, svQueryStringHelper, $q, $rootScope) {
 
 	        var config = this.config;
 	        var isAuthenticated = function isAuthenticated() {

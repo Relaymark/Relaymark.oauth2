@@ -55,7 +55,7 @@ class svOAuth2 {
         };
 
         /*@ngInject*/
-        this.$get = function ($http, svOAuthStorage, svQueryStringHelper, $q) {
+        this.$get = function ($http, svOAuthStorage, svQueryStringHelper, $q, $rootScope) {
 
             var config = this.config;
             var isAuthenticated = function () {
