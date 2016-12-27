@@ -8,7 +8,8 @@ export default class svOAuthInterceptor {
     this.isAConfiguredEndpointUrl = function (url, configuredUrls) {
       var i = 0;
       while (i < configuredUrls.length) {
-        if (url.indexOf(configuredUrls[i])) {
+        var index = url.indexOf(configuredUrls[i]);
+	      if (index >= 0) {
           return true;
         }
         ++i;
