@@ -186,7 +186,7 @@ class svOAuth2 {
                 revokeToken: revokeToken
             };
         };
-        this.$get.$inject = ['$http', 'svOAuthStorage', 'svQueryStringHelper', '$q'];
+        this.$get.$inject = ['$http', 'svOAuthStorage', 'svQueryStringHelper', '$q', '$rootScope'];
     }
 
 

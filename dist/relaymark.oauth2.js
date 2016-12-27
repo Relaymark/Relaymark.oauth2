@@ -374,7 +374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            revokeToken: revokeToken
 	        };
 	    };
-	    this.$get.$inject = ['$http', 'svOAuthStorage', 'svQueryStringHelper', '$q'];
+	    this.$get.$inject = ['$http', 'svOAuthStorage', 'svQueryStringHelper', '$q', '$rootScope'];
 	};
 
 	exports.default = svOAuth2;
