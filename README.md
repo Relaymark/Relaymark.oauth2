@@ -1,11 +1,14 @@
-#relaymark.oauth2
-##Goal
+# relaymark.oauth2
+
+## Goal
+
 At Relaymark, we are using OAuth2, and we searched a nice angular module which uses the Authorization Code Flow properly. 
 Finally we made ours and we decide to provide it to the community ! Yeah !
 
 The module name is : angular.module('YourAwesomeApp', ['relaymark.oauth2'])
 
-##Angular module config
+## Angular module config
+
 This is a list of configuration which you can override :
 
     defaults = {
@@ -26,7 +29,8 @@ Your auth server will redirect to this url.
 You must add 'openid' in scope. 
 Do not forget to add your url in PostLogoutRedirectUris on the client document (stored in your db, we guess).
     
-###In ES 6
+### In ES 6
+
     config.$inject = ['AppConstants', '$httpProvider', 'svOAuth2Provider'];
     
       export default function config(AppConstants,  $httpProvider, svOAuth2Provider, svOAuthInterceptorProvider) {
@@ -43,7 +47,8 @@ Do not forget to add your url in PostLogoutRedirectUris on the client document (
         });
       }
 
-###Angular 1.x
+### Angular 1.x
+
     angular
       .module('YourAwesomeApp', ['relaymark.oauth2'])
       .config(function(svOAuth2Provider, AppConstants, $httpProvider) { 
@@ -60,10 +65,12 @@ Do not forget to add your url in PostLogoutRedirectUris on the client document (
 
 
 
-##Login controller  
+## Login controller  
+
 If you have your login page on your OAuth server, It's easy : just ask for the access code   
 
-###Angular 1.x 
+### Angular 1.x 
+
     angular.module('YourAwesomeApp')
       .controller('LoginController', function (svOAuth2) {
           svOAuth2.getAccessCode();
@@ -71,7 +78,8 @@ If you have your login page on your OAuth server, It's easy : just ask for the a
       );
  
 
-###In ES 6
+### In ES 6
+
     export default
         class LoginController {
           static get UID() {
@@ -85,10 +93,12 @@ If you have your login page on your OAuth server, It's easy : just ask for the a
         LoginController.$inject = ['svOAuth2']; 
     
 
-##Callback controller  
+## Callback controller  
+
 When the server send you back to your callback url, ask for an access token :
 
-###Angular 1.x
+### Angular 1.x
+
     angular.module('YourAwesomeApp')
       .controller('CallbackController', function ($state, svOAuth2) {
         svOAuth2.getAccessToken($state.params.code).then(function () {
@@ -98,7 +108,9 @@ When the server send you back to your callback url, ask for an access token :
         });
     });
 
-###In ES6
+### In ES6
+
+
     export default
     class OAuthController {
       static get UID() {
@@ -117,7 +129,8 @@ When the server send you back to your callback url, ask for an access token :
     }
     OAuthController.$inject = ['$state', 'svOAuth2']; 
   
-##Interceptors
+## Interceptors
+
 svOAuthInterceptor is a service which catch the responses from an url (your api server for instance). 
 
 If the server responds with 400 with the message "invalid_request" or "invalid_grant", it will emit an event "oauth:error" and removes the token.
@@ -127,7 +140,7 @@ If the server responds with 401 with the status text "Unauthorized", it will ren
 If the server does not respond (status 0 or -1), it will emit an event "oauth:apiOffline".
 
 
-##Deploy
+## Deploy
 
     git commit -am "Your changes..."
     npm version patch
